@@ -15,6 +15,14 @@ export interface PokemonObject {
   moves: string[];
 }
 
+export type Move = {
+  name: string;
+  type: string;
+  power: number;
+  accuracy: number;
+  priority: number;
+};
+
 export const Pokemons: PokemonObject[] = [
   {
     species: "Bulbasaur",
