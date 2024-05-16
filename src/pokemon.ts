@@ -3,8 +3,10 @@ import {
   PokemonObject,
   ExperienceCurves,
   CurveKeys,
+  Moves,
+  Move,
 } from "./pokedex";
-import randomBetween from "./utils";
+import randomBetween from "./utils.ts";
 
 type StatsObject = {
   hp: number;
@@ -15,7 +17,7 @@ type StatsObject = {
   speed: number;
 };
 
-class Pokemon {
+export class Pokemon {
   species: string;
   name: string;
   level: number;
@@ -29,12 +31,12 @@ class Pokemon {
   individualValues: StatsObject;
   effortValues: StatsObject;
   currentHp: number;
-  currentMove: string | null;
+  currentMove: Move | undefined | null;
 
-  constructor(species: string, name: string, level: number = 1) {
+  constructor(species: string, name: string = species, level: number = 1) {
     // Inicializar atributos usando los parámetros
     this.species = species;
-    this.name = name || species;
+    this.name = name;
     this.level = level;
 
     // Inicializar atributos usando la información del Pokedex
@@ -148,14 +150,20 @@ class Pokemon {
 
   receiveDamage(damage: number): void {
     // reducir currentHp en la cantidad de damage. No debe quedar menor a 0.
+    this.currentHp = this.currentHp < damage ? 0 : this.currentHp - damage;
   }
 
-  setCurrentMove(move): void {
+  setCurrentMove(move: string): void {
     // buscar el move (string) en el pokedex y asignarlo al atributo currentMove
+    const moveObject: Move | undefined = Moves.find(
+      (movement) => movement.name === move
+    );
+    this.currentMove = moveObject;
   }
 
   isFainted(): boolean {
     // retornar si currentHp es 0 o no
+    return this.currentHp === 0;
   }
 
   attack(target): void {
@@ -176,6 +184,8 @@ class Pokemon {
 
   moveHits(): boolean {
     // calcular si pega en base al accuracy del currentMove
+    const randomNumber = randomBetween(80, 100);
+    return randomNumber <= this.currentMove?.accuracy!;
   }
 
   isCritical(): boolean {
@@ -202,9 +212,3 @@ class Pokemon {
     // incrementar nivel y Anunciar "[nombre] reached level [nivel]!"
   }
 }
-
-const poke = new Pokemon("Spearow", "char");
-console.log(poke.type);
-console.log(poke.growthRate);
-console.log(poke.baseExp);
-console.log(poke.experiencePoints);
