@@ -6,6 +6,7 @@ import {
   Moves,
   Move,
   TypeMultiplier,
+  SpecialMoveTypes,
 } from "./pokedex";
 import randomBetween from "./utils.ts";
 
@@ -199,18 +200,32 @@ export class Pokemon {
 
   calculateBaseDamage(target: Pokemon): number {
     // determinar si el movimiento es especial comparando el currentMove con la data de Pokedex (SpecialMoveTypes)
+    const special = SpecialMoveTypes.find(
+      (el) => el === this.currentMove?.type
+    );
     // determinar si se usara el stat attack o specialAttack del atacante
+    const offensiveStat = special
+      ? this.stats.specialAttack
+      : this.stats.attack;
     // determinar si se usara el stat defense o specialDefense del defensor
+    const targetDefensiveStat = special
+      ? target.stats.specialDefense
+      : target.stats.defense;
+
+    const movePower = this.currentMove?.power!;
     // retornar el rsultado de la formula de daño
+    return (
+      Math.floor(
+        Math.floor(
+          (Math.floor((2 * this.level) / 5.0 + 2) * offensiveStat * movePower) /
+            targetDefensiveStat
+        ) / 50
+      ) + 2
+    );
   }
 
   calculateEffectiveness(target: Pokemon): number {
-    // caluclar el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
-    // TODO: get this calculation right, considering when there are 2 types.
-    // const moveType = this.currentMove?.type;
-    // const opponentType = target.type[0];
-    // return TypeMultiplier[moveType!][opponentType];
-
+    // calcular el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
     const moveType = this.currentMove?.type;
 
     // If the opponent has one type
