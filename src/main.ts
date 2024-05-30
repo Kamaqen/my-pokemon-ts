@@ -8,14 +8,14 @@
 
 import { Pokemon } from "./pokemon";
 
-const myPoke = new Pokemon("Spearow");
-const opponentPoke = new Pokemon("Bulbasaur");
+const myPoke = new Pokemon("Squirtle");
+const opponentPoke = new Pokemon("Onix");
 console.log(myPoke.type);
 console.log(opponentPoke.type);
 console.log(myPoke.growthRate);
 console.log(myPoke.baseExp);
 console.log(myPoke.experiencePoints);
-myPoke.setCurrentMove("peck");
+myPoke.setCurrentMove("bubble");
 console.log(myPoke.calculateEffectiveness(opponentPoke));
 
-console.log(myPoke.isFainted);
+console.log(myPoke.isFainted());
