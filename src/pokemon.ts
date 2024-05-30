@@ -183,13 +183,17 @@ export class Pokemon {
   }
 
   moveHits(): boolean {
-    // calcular si pega en base al accuracy del currentMove
-    const randomNumber = randomBetween(80, 100);
+    // Generar un número aleatorio entre 1 y 100
+    const randomNumber = randomBetween(1, 100);
+
+    // Comprobar si el número aleatorio es menor o igual que la precisión del movimiento
     return randomNumber <= this.currentMove?.accuracy!;
   }
 
   isCritical(): boolean {
     // 1/16 de probabilidad que sea critico
+    const randomNumber = randomBetween(1, 16);
+    return randomNumber === 1;
   }
 
   calculateBaseDamage(target: string): number {
