@@ -29,6 +29,15 @@ interface TypeMultiplier {
   };
 }
 
+type ExperienceCurveType = {
+  slow: (a: number) => number;
+  mediumSlow: (a: number) => number;
+  mediumFast: (a: number) => number;
+  fast: (a: number) => number;
+};
+
+export type CurveKeys = keyof ExperienceCurveType;
+
 export const Pokemons: PokemonObject[] = [
   {
     species: "Bulbasaur",
@@ -386,15 +395,6 @@ export const TypeMultiplier: TypeMultiplier = {
     steel: 0.5,
   },
 };
-
-type ExperienceCurveType = {
-  slow: (a: number) => number;
-  mediumSlow: (a: number) => number;
-  mediumFast: (a: number) => number;
-  fast: (a: number) => number;
-};
-
-export type CurveKeys = keyof ExperienceCurveType;
 
 export const ExperienceCurves: ExperienceCurveType = {
   slow: (n) => (5 * n ** 3) / 4,

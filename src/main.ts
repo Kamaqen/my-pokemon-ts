@@ -16,6 +16,9 @@ console.log(myPoke.growthRate);
 console.log(myPoke.baseExp);
 console.log(myPoke.experiencePoints);
 myPoke.setCurrentMove("bubble");
+console.log(myPoke.stats);
+console.log(opponentPoke.stats);
 console.log(myPoke.calculateEffectiveness(opponentPoke));
+console.log(myPoke.calculateBaseDamage(opponentPoke));
 
 console.log(myPoke.isFainted());
