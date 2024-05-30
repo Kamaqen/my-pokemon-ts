@@ -23,6 +23,12 @@ export type Move = {
   priority: number;
 };
 
+interface TypeMultiplier {
+  [attackingType: string]: {
+    [defendingType: string]: number;
+  };
+}
+
 export const Pokemons: PokemonObject[] = [
   {
     species: "Bulbasaur",
@@ -222,7 +228,7 @@ export const SpecialMoveTypes = [
   "dark",
 ];
 
-export const TypeMultiplier = {
+export const TypeMultiplier: TypeMultiplier = {
   normal: {
     rock: 0.5,
     ghost: 0,
