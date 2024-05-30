@@ -167,7 +167,7 @@ export class Pokemon {
     return this.currentHp === 0;
   }
 
-  attack(target): void {
+  attack(target: Pokemon): void {
     // anunciar "[nombre] used [MOVE]!"
     // determinar si el movimiento "pega" con moveHits()
     // si "pega":
@@ -197,7 +197,7 @@ export class Pokemon {
     return randomNumber === 1;
   }
 
-  calculateBaseDamage(target: string): number {
+  calculateBaseDamage(target: Pokemon): number {
     // determinar si el movimiento es especial comparando el currentMove con la data de Pokedex (SpecialMoveTypes)
     // determinar si se usara el stat attack o specialAttack del atacante
     // determinar si se usara el stat defense o specialDefense del defensor
@@ -206,12 +206,29 @@ export class Pokemon {
 
   calculateEffectiveness(target: Pokemon): number {
     // caluclar el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
+    // TODO: get this calculation right, considering when there are 2 types.
+    // const moveType = this.currentMove?.type;
+    // const opponentType = target.type[0];
+    // return TypeMultiplier[moveType!][opponentType];
+
     const moveType = this.currentMove?.type;
-    const opponentType = target.type[0];
-    return TypeMultiplier[moveType!][opponentType];
+
+    // If the opponent has one type
+    if (target.type.length === 1) {
+      const opponentType = target.type[0];
+      return TypeMultiplier[moveType!][opponentType];
+    } else if (target.type.length === 2) {
+      const opponentType1 = target.type[0];
+      const opponentType2 = target.type[1];
+      const effectiveness1 = TypeMultiplier[moveType!][opponentType1] || 1;
+      const effectiveness2 = TypeMultiplier[moveType!][opponentType2] || 1;
+      return effectiveness1 * effectiveness2;
+    } else {
+      return 1;
+    }
   }
 
-  processVictory(target): void {
+  processVictory(target: Pokemon): void {
     // calcular la experiencia ganada e incrementarla a tus experiencePoints
     // incrementar los effortValues en la estadística correspondiente con la información de effortPoints del oponente
     // anunciar "[nombre] gained [cantidad] experience points"
