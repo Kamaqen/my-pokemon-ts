@@ -5,6 +5,7 @@ import {
   CurveKeys,
   Moves,
   Move,
+  TypeMultiplier,
 } from "./pokedex";
 import randomBetween from "./utils.ts";
 
@@ -203,8 +204,11 @@ export class Pokemon {
     // retornar el rsultado de la formula de daño
   }
 
-  calculateEffectiveness(target): number {
+  calculateEffectiveness(target: Pokemon): number {
     // caluclar el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
+    const moveType = this.currentMove?.type;
+    const opponentType = target.type[0];
+    return TypeMultiplier[moveType!][opponentType];
   }
 
   processVictory(target): void {
