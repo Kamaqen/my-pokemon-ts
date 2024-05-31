@@ -20,5 +20,6 @@ console.log(myPoke.stats);
 console.log(opponentPoke.stats);
 console.log(myPoke.calculateEffectiveness(opponentPoke));
 console.log(myPoke.calculateBaseDamage(opponentPoke));
+myPoke.attack(opponentPoke);
 
 console.log(myPoke.isFainted());
