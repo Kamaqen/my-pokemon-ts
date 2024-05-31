@@ -170,18 +170,54 @@ export class Pokemon {
 
   attack(target: Pokemon): void {
     // anunciar "[nombre] used [MOVE]!"
+    console.log(
+      `%c${this.name} used ${this.currentMove?.name.toUpperCase()}`,
+      "font-weight: bold; color: purple"
+    );
     // determinar si el movimiento "pega" con moveHits()
+    const moveHits: boolean = this.moveHits();
     // si "pega":
-    //  calcular daño base con calculateDamage
-    //  determinar si es un critical hit con isCritical
-    //  si es critico, anunciarlo
-    //  calcular el multiplicador de efectividad con calculateEffectiveness
-    //  anunciar mensaje según efectividad. Por ejemplo "It's not very effective..."
-    //  calcular el daño final usando el daño base, si fue critico o no y la efectividad
-    //  Hacer daño al oponente usando su metedo receiveDamage
-    //  Anunciar el daño hecho: "And it hit [oponente] with [daño] damage"
-    // si no "pega"
-    //  anunciar "But it MISSED!"
+    if (moveHits) {
+      //  calcular daño base con calculateDamage
+      const baseDamage: number = this.calculateBaseDamage(target);
+      //  determinar si es un critical hit con isCritical
+      const isCritical = this.isCritical();
+      //  si es critico, anunciarlo
+      if (isCritical) {
+        console.log("%cIt was a CRITICAL hit!", "color: pink");
+      }
+      //  calcular el multiplicador de efectividad con calculateEffectiveness
+      const effectiveness: number = this.calculateEffectiveness(target);
+      //  anunciar mensaje según efectividad. Por ejemplo "It's not very effective..."
+      switch (effectiveness) {
+        case 0:
+          console.log(
+            `%cIt doesn't affect ${target.name}.`,
+            "font-style: italic"
+          );
+          break;
+        case 0.5:
+          console.log("%cIt's not very effective...", "font-style: italic");
+          break;
+        case 2:
+        case 4:
+          console.log("%cIt's super effective!", "font-style: italic");
+          break;
+      }
+
+      //  calcular el daño final usando el daño base, si fue critico o no y la efectividad
+      const damage: number = isCritical
+        ? baseDamage * effectiveness * 1.5
+        : baseDamage * effectiveness;
+      //  Hacer daño al oponente usando su metedo receiveDamage
+      target.receiveDamage(damage);
+      //  Anunciar el daño hecho: "And it hit [oponente] with [daño] damage"
+      console.log(`And it hit ${target.name} with ${damage} damage.`);
+    } else {
+      // si no "pega"
+      //  anunciar "But it MISSED!"
+      alert("But it MISSED!");
+    }
   }
 
   moveHits(): boolean {
