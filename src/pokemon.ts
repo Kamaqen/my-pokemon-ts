@@ -19,13 +19,15 @@ type StatsObject = {
   speed: number;
 };
 
+type EffortPoints = { type: string; amount: number };
+
 export class Pokemon {
   species: string;
   name: string;
   level: number;
   type: string[];
   baseExp: number;
-  effortPoints: { type: string; amount: number };
+  effortPoints: EffortPoints;
   growthRate: CurveKeys;
   baseStats: StatsObject;
   moves: string[];
@@ -281,10 +283,23 @@ export class Pokemon {
 
   processVictory(target: Pokemon): void {
     // calcular la experiencia ganada e incrementarla a tus experiencePoints
+    const experienceGained: number = Math.floor(
+      (target.baseExp * target.level) / 7
+    );
+    this.experiencePoints += experienceGained;
     // incrementar los effortValues en la estadística correspondiente con la información de effortPoints del oponente
+    const statType = target.effortPoints.type as keyof StatsObject;
+    this.effortValues[statType] += target.effortPoints.amount;
     // anunciar "[nombre] gained [cantidad] experience points"
+    console.log(`${this.name} gained ${experienceGained} experience points.`);
     // verificar si los nuevos experiencePoints te llevan a subir de nivel
+    const levelsUp: boolean =
+      this.experiencePoints >= this.expForLevel(this.level + 1);
     // si se sube de nivel
     // incrementar nivel y Anunciar "[nombre] reached level [nivel]!"
+    if (levelsUp) {
+      this.level++;
+      console.log(`${this.name} reached level ${this.level}!`);
+    }
   }
 }
