@@ -50,15 +50,6 @@ export class Player {
 }
 
 export class Bot extends Player {
-  constructor(
-    name: string,
-    species: string,
-    pokeName: string,
-    level: number = 1
-  ) {
-    super(name, species, pokeName, level);
-  }
-
   selectMove(): void | true {
     // Selecciona un movimiento de manera aleatoria
     const lastMoveIndex = this.pokemon.moves.length - 1;
