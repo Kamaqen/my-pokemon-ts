@@ -4,46 +4,69 @@ import randomBetween from "./utils";
 export class Player {
   name: string;
   pokemon: Pokemon;
-  
-  constructor(name: string, species: string, pokeName: string, level: number = 1) {
-    // asignar name a un atributo con el mismo nombre
+
+  constructor(
+    name: string,
+    species: string,
+    pokeName: string,
+    level: number = 1
+  ) {
+    // Asignar name a un atributo con el mismo nombre
     this.name = name;
-    // crear un Pokemon con el resto de parametros y asignarlo al atributo pokemon
+    // Crear un Pokemon con el resto de parámetros y asignarlo al atributo pokemon
     this.pokemon = new Pokemon(species, pokeName, level);
-    
   }
 
   selectMove(): void | true {
-    // mostrar al usuario los movimientos disponibles
+    // Mostrar al usuario los movimientos disponibles
     const moves: string[] = this.pokemon.moves;
-    const movesString = moves.join('\n');
+    const movesString = moves.join("\n");
     let response = moves[0];
-    // Volver a pedir si ingresa un movimiento invalido
+
+    // Volver a pedir si ingresa un movimiento inválido
     do {
-      if(response || response === "") {
-        response = prompt(`Elige un movimiento:\n${movesString}\n`, response)?.toLowerCase()!;
+      if (response !== null) {
+        response = prompt(
+          `Elige un movimiento:\n${movesString}\n`,
+          response
+        )?.toLowerCase()!;
       } else {
         console.log("return true");
         return true;
       }
-    } while(!moves.includes(response))
-      // TODO: agregar el mensaje de opción no válida
+
+      // Mostrar alerta si el movimiento ingresado no es válido
+      if (response !== null && !moves.includes(response)) {
+        alert("Opción no válida. Por favor, elige un movimiento de la lista.");
+      }
+    } while (response !== null && !moves.includes(response));
 
     // Asigna el movimiento con 'setCurrentMove'
-    this.pokemon.setCurrentMove(response);
-    console.log(this.pokemon.currentMove);
+    if (response !== null) {
+      this.pokemon.setCurrentMove(response);
+      console.log(this.pokemon.currentMove);
+    }
   }
 }
 
 export class Bot extends Player {
-  selectMove() {
-    // selecciona un movimiento de maner aleatoria
-    const lastMoveIndex =  this.pokemon.moves.length -1;
+  constructor(
+    name: string,
+    species: string,
+    pokeName: string,
+    level: number = 1
+  ) {
+    super(name, species, pokeName, level);
+  }
+
+  selectMove(): void | true {
+    // Selecciona un movimiento de manera aleatoria
+    const lastMoveIndex = this.pokemon.moves.length - 1;
     const moveIndex = randomBetween(0, lastMoveIndex);
     const moveSelected = this.pokemon.moves[moveIndex];
-    // los asigna con 'setCurrentMove'
+
+    // Los asigna con 'setCurrentMove'
     this.pokemon.setCurrentMove(moveSelected);
     console.log(this.pokemon.currentMove);
   }
 }
-

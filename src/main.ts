@@ -28,8 +28,8 @@ import { Pokemon } from "./pokemon";
 
 // console.log(myPoke.isFainted());
 
-// const player = new Player("Ash", "Bulbasaur", "Bulbasaur", 1);
-// player.selectMove();
+const player = new Player("Ash", "Bulbasaur", "Bulbasaur", 1);
+player.selectMove();
 
 const bot = new Bot("Ash", "Bulbasaur", "Bulbasaur", 1);
 bot.selectMove();
