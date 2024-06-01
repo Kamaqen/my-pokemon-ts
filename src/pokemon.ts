@@ -37,7 +37,7 @@ export class Pokemon {
   currentHp: number;
   currentMove: Move | undefined | null;
 
-  constructor(species: string, name: string = species, level: number = 1) {
+  constructor(species: string, name: string = species, level: number) {
     // Inicializar atributos usando los parámetros
     this.species = species;
     this.name = name;
