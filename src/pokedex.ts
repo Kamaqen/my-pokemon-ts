@@ -397,8 +397,8 @@ export const TypeMultiplier: TypeMultiplier = {
 };
 
 export const ExperienceCurves: ExperienceCurveType = {
-  slow: (n) => (5 * n ** 3) / 4,
-  mediumSlow: (n) => (6 / 5) * n ** 3 - 15 * n ** 2 + 100 * n - 140,
-  mediumFast: (n) => n ** 3,
-  fast: (n) => (4 * n ** 3) / 5,
+  slow: (n) => Math.floor((5 * n ** 3) / 4),
+  mediumSlow: (n) => Math.floor((6 / 5) * n ** 3 - 15 * n ** 2 + 100 * n - 140),
+  mediumFast: (n) => Math.floor(n ** 3),
+  fast: (n) => Math.floor((4 * n ** 3) / 5),
 };
