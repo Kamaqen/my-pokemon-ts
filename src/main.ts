@@ -6,6 +6,7 @@
 // Inciar un intervalo para mostras los segundos restantes en la consola
 // Recuerda 'cancelar' el intervalo cuando llegue a 0 segundos
 
+import { Battle } from "./battle";
 import { Bot, Player } from "./player";
 import { Pokemon } from "./pokemon";
 
@@ -28,8 +29,11 @@ import { Pokemon } from "./pokemon";
 
 // console.log(myPoke.isFainted());
 
-// const player = new Player("Ash", "Bulbasaur", "Bulbasaur", 1);
+const player = new Player("Ash", "Bulbasaur", "Bulbasaur", 1);
 // player.selectMove();
 
-const bot = new Bot("Ash", "Bulbasaur", "Bulbasaur", 1);
-bot.selectMove();
+const bot = new Bot("Misti", "Charmander", "Charmander", 1);
+// bot.selectMove();
+
+const battle = new Battle(player, bot)
+battle.start();
