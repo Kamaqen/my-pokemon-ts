@@ -23,7 +23,6 @@ export default class Game {
       // Usar menu() para pedir al usuario que elija entre Train, Leader o Stats
       const choice = Game.menu();
       if (choice !== null) {
-        console.log(choice);
         // Ejecutar train(), challengeLeader() o showStats() segun la opción del usuario
         switch (choice) {
           case "Entrenar":
@@ -138,7 +137,29 @@ Cuando te sientas preparado, puedes desafiar a BROCK, el LÍDER del GIMNASIO de 
     }
   }
 
-  static menu(): string | null {}
+  static menu(): string | null {
+    // pedir al usuario que elija entre "Entrenar", "Estadísticas", "Líder";
+    const options = ["Entrenar", "Estadísticas", "Líder"];
+
+    while (true) {
+      // Mostrar el prompt en el navegador
+      const input = window.prompt(
+        "Elige una opción:\n Entrenar\n Estadísticas\n Líder",
+        options[0]
+      );
+
+      // Si el usuario presiona "Cancelar", retornar null
+      if (input === null) {
+        break;
+      } else if (options.includes(input)) {
+        // retornar una opción válida
+        return input;
+      } else {
+        alert("Opción no válida. Por favor, elija una opción válida.");
+      }
+    }
+    return null;
+  }
 
   static goodbye() {
     console.log(
