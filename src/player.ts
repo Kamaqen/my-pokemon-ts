@@ -1,5 +1,5 @@
 import { Pokemon } from "./pokemon";
-import randomBetween from "./utils";
+import { randomBetween } from "./utils";
 
 export class Player {
   name: string;

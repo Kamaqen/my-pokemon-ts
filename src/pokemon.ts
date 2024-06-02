@@ -8,7 +8,7 @@ import {
   TypeMultiplier,
   SpecialMoveTypes,
 } from "./pokedex";
-import randomBetween from "./utils.ts";
+import { randomBetween } from "./utils.ts";
 
 type StatsObject = {
   hp: number;
