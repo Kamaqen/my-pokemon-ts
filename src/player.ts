@@ -10,7 +10,6 @@ export class Player {
     this.name = name;
     // crear un Pokemon con el resto de parametros y asignarlo al atributo pokemon
     this.pokemon = new Pokemon(species, pokeName, level);
-    
   }
 
   selectMove(): void | true {
@@ -37,7 +36,7 @@ export class Player {
 
 export class Bot extends Player {
   selectMove() {
-    // selecciona un movimiento de maner aleatoria
+    // selecciona un movimiento de manera aleatoria
     const lastMoveIndex =  this.pokemon.moves.length -1;
     const moveIndex = randomBetween(0, lastMoveIndex);
     const moveSelected = this.pokemon.moves[moveIndex];
