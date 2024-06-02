@@ -19,10 +19,32 @@ export default class Game {
     this.player = newPlayer;
     console.log(this.player, this.player.pokemon);
     // Empezar el bucle del juego
-    // Usar menu() para pedir al usuario que elija entre Train, Leader o Stats
-    // Ejecutar train(), challengeLeader() o showStats() segun la opción del usuario
-    // Continuar el bucle hasta que el usuario aprete Cancel
-    // Llamar a goodbye para la despedida
+    while (true) {
+      // Usar menu() para pedir al usuario que elija entre Train, Leader o Stats
+      const choice = Game.menu();
+      if (choice !== null) {
+        console.log(choice);
+        // Ejecutar train(), challengeLeader() o showStats() segun la opción del usuario
+        switch (choice) {
+          case "Entrenar":
+            this.train();
+            break;
+          case "Estadísticas":
+            this.showStats();
+            break;
+          case "Líder":
+            this.challengeLeader();
+            break;
+          // Continuar el bucle hasta que el usuario aprete Cancel
+          default:
+            alert("Opción no válida.");
+        }
+      } else {
+        // Llamar a goodbye para la despedida
+        Game.goodbye();
+        break;
+      }
+    }
   }
 
   train() {
@@ -40,20 +62,30 @@ export default class Game {
   }
 
   showStats() {
-    // usar console.table para presentar las estadisticas de tu pokemon:
-    /*
-      - species
-      - level
-      - type
-      - experiencePoints
-      stats:
-      - hp
-      - attack
-      - defense
-      - specialAttack
-      - specialDefense
-      - speed
-    */
+    // Usar console.table para presentar las estadísticas de tu Pokémon
+    const {
+      species,
+      level,
+      type,
+      experiencePoints,
+      stats: { hp, attack, defense, specialAttack, specialDefense, speed },
+    } = this.player.pokemon;
+
+    const tipo = type.join(", ");
+    const statsTable = [
+      { Atributo: "Especie", Valor: species },
+      { Atributo: "Nivel", Valor: level },
+      { Atributo: "Tipo", Valor: tipo },
+      { Atributo: "Puntos de Experiencia", Valor: experiencePoints },
+      { Atributo: "Puntos de Salud", Valor: hp },
+      { Atributo: "Ataque", Valor: attack },
+      { Atributo: "Defensa", Valor: defense },
+      { Atributo: "Ataque Especial", Valor: specialAttack },
+      { Atributo: "Defensa Especial", Valor: specialDefense },
+      { Atributo: "Velocidad", Valor: speed },
+    ];
+
+    console.table(statsTable);
   }
 
   static welcome() {
@@ -106,13 +138,16 @@ Cuando te sientas preparado, puedes desafiar a BROCK, el LÍDER del GIMNASIO de 
     }
   }
 
-  static menu() {
-    // pedir al usuario que elija entre "Entrenar", "Estadísticas", "Líder";
-    // retornar una opción válida
-  }
+  static menu(): string | null {}
 
   static goodbye() {
-    console.log("%cGracias por jugar Pokémon TS Edition", "font-weight: bold");
-    console.log("Este juego fue creado con amor y muchos anys.");
+    console.log(
+      "%cGracias por jugar Pokémon TS Edition.",
+      "font-weight: bold; color: teal"
+    );
+    console.log(
+      "%cEste juego fue creado con amor y muchos anys.",
+      "color: turquoise"
+    );
   }
 }
