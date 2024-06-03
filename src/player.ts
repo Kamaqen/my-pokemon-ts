@@ -1,5 +1,5 @@
 import { Pokemon } from "./pokemon";
-import randomBetween from "./utils";
+import { randomBetween } from "./utils";
 
 export class Player {
   name: string;
@@ -8,7 +8,7 @@ export class Player {
   constructor(
     name: string,
     species: string,
-    pokeName: string,
+    pokeName: string | undefined,
     level: number = 1
   ) {
     // Asignar name a un atributo con el mismo nombre
@@ -50,9 +50,9 @@ export class Player {
 }
 
 export class Bot extends Player {
-  selectMove() {
-    // selecciona un movimiento de manera aleatoria
-    const lastMoveIndex =  this.pokemon.moves.length -1;
+  selectMove(): void | true {
+    // Selecciona un movimiento de manera aleatoria
+    const lastMoveIndex = this.pokemon.moves.length - 1;
     const moveIndex = randomBetween(0, lastMoveIndex);
     const moveSelected = this.pokemon.moves[moveIndex];
 

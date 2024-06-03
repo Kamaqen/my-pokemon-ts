@@ -8,7 +8,7 @@ import {
   TypeMultiplier,
   SpecialMoveTypes,
 } from "./pokedex";
-import randomBetween from "./utils.ts";
+import { randomBetween } from "./utils.ts";
 
 type StatsObject = {
   hp: number;
@@ -218,7 +218,7 @@ export class Pokemon {
     } else {
       // si no "pega"
       //  anunciar "But it MISSED!"
-      alert("But it MISSED!");
+      console.log("But it MISSED!");
     }
   }
 
@@ -238,9 +238,7 @@ export class Pokemon {
 
   calculateBaseDamage(target: Pokemon): number {
     // determinar si el movimiento es especial comparando el currentMove con la data de Pokedex (SpecialMoveTypes)
-    const special = SpecialMoveTypes.find(
-      (el) => el === this.currentMove?.type
-    );
+    const special = SpecialMoveTypes.includes(this.currentMove?.type!);
     // determinar si se usara el stat attack o specialAttack del atacante
     const offensiveStat = special
       ? this.stats.specialAttack
@@ -265,20 +263,26 @@ export class Pokemon {
   calculateEffectiveness(target: Pokemon): number {
     // calcular el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
     const moveType = this.currentMove?.type;
-
-    // If the opponent has one type
-    if (target.type.length === 1) {
-      const opponentType = target.type[0];
-      return TypeMultiplier[moveType!][opponentType];
-    } else if (target.type.length === 2) {
-      const opponentType1 = target.type[0];
-      const opponentType2 = target.type[1];
-      const effectiveness1 = TypeMultiplier[moveType!][opponentType1] || 1;
-      const effectiveness2 = TypeMultiplier[moveType!][opponentType2] || 1;
-      return effectiveness1 * effectiveness2;
-    } else {
+    // si no hay un movimiento actual o no tiene tipo, la efectividad es 1
+    if (!moveType) {
       return 1;
     }
+
+    // obtener los tipos del oponente
+    const targetTypes = target.type;
+
+    // inicializar la efectividad en 1
+    let effectiveness = 1;
+
+    // calcular la efectividad para cada tipo del oponente
+    targetTypes.forEach((targetType) => {
+      // si no existe la entrada en el multiplicador, se asume efectividad 1
+      const typeEffectiveness = TypeMultiplier[moveType]?.[targetType] ?? 1;
+      effectiveness *= typeEffectiveness;
+    });
+
+    // retornar la efectividad calculada
+    return effectiveness;
   }
 
   processVictory(target: Pokemon): void {
