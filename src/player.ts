@@ -8,7 +8,7 @@ export class Player {
   constructor(
     name: string,
     species: string,
-    pokeName: string,
+    pokeName: string | undefined,
     level: number = 1
   ) {
     // Asignar name a un atributo con el mismo nombre
