@@ -81,6 +81,24 @@ export default class Game {
 
   challengeLeader() {
     // mismo mecanismo que train() pero el Bot se llama Brock y usa un Onix nivel 10
+    const leader = new Bot("Brock", "Onix", undefined, 10);
+    // Anunciar "[nombre] challenges [oponente] for training"
+    console.log(
+      `${this.player?.name} reta al líder de gimnasio ${leader.name}.`
+    );
+    // Anunciar "[oponente] has a [pokemon] level [nivel]"
+    console.log(
+      `${leader.name} tiene un ${leader.pokemon.name} de nivel ${leader.pokemon.level}`
+    );
+    // Usar confirm() para preguntar al usuario si quiere pelear "Do you want to fight?"
+    const confirmation = window.confirm("¿Deseas pelear?");
+    // Si, sí quiere pelear
+    if (confirmation) {
+      // Crear una Batalla entre el player y el oponente
+      const battle = new Battle(this.player!, leader);
+      // empezar la batalla con su start
+      battle.start();
+    }
   }
 
   showStats() {
