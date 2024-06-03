@@ -52,7 +52,7 @@ export default class Game {
     // Crear un Bot llamado "Random Person", con un Pokemon aleatorio de nivel entre 1 y 5
     const pokemons: string[] = [];
     Pokemons.forEach((poke) => pokemons.push(poke.species));
-    const speciesIndex = randomBetween(0, pokemons.length);
+    const speciesIndex = randomBetween(0, pokemons.length - 1);
     const level = randomBetween(1, 5);
     const randomPerson = new Bot(
       "Persona Aleatoria",
