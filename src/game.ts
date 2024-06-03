@@ -1,5 +1,7 @@
-import { Player } from "./player";
-import { capitalize } from "./utils";
+import { Battle } from "./battle";
+import { Bot, Player } from "./player";
+import { Pokemons } from "./pokedex";
+import { capitalize, randomBetween } from "./utils";
 
 export default class Game {
   player: Player | undefined;
@@ -48,12 +50,33 @@ export default class Game {
 
   train() {
     // Crear un Bot llamado "Random Person", con un Pokemon aleatorio de nivel entre 1 y 5
+    const pokemons: string[] = [];
+    Pokemons.forEach((poke) => pokemons.push(poke.species));
+    const speciesIndex = randomBetween(0, pokemons.length);
+    const level = randomBetween(1, 5);
+    const randomPerson = new Bot(
+      "Persona Aleatoria",
+      pokemons[speciesIndex],
+      undefined,
+      level
+    );
     // Anunciar "[nombre] challenges [oponente] for training"
+    console.log(
+      `${this.player?.name} reta a ${randomPerson.name} para un entrenamiento.`
+    );
     // Anunciar "[oponente] has a [pokemon] level [nivel]"
+    console.log(
+      `${randomPerson.name} tiene un ${randomPerson.pokemon.name} de nivel ${randomPerson.pokemon.level}`
+    );
     // Usar confirm() para preguntar al usuario si quiere pelear "Do you want to fight?"
+    const confirmation = window.confirm("¿Deseas pelear?");
     // Si, sí quiere pelear
-    // Crear una Batalla entre el player y el oponente
-    // empezar la batalla con su start
+    if (confirmation) {
+      // Crear una Batalla entre el player y el oponente
+      const battle = new Battle(this.player!, randomPerson);
+      // empezar la batalla con su start
+      battle.start();
+    }
   }
 
   challengeLeader() {
@@ -167,7 +190,7 @@ Cuando te sientas preparado, puedes desafiar a BROCK, el LÍDER del GIMNASIO de 
       "font-weight: bold; color: teal"
     );
     console.log(
-      "%cEste juego fue creado con amor y muchos anys.",
+      "%cEste juego fue creado con amor (y muchos anys).",
       "color: turquoise"
     );
   }
