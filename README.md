@@ -60,7 +60,12 @@ El proyecto sigue una estructura minimalista con un archivo por cada clase del j
 
 ## Contribuir
 
-Las contribuciones son bienvenidas. Puedes hacerlo a través de un Pull Request (PR).
+Las contribuciones son bienvenidas. Puedes hacerlo a través de esta manera:
+
+- Haz un fork del repositorio.
+- Crea una rama para tu contribución.
+- Realiza tus cambios y asegúrate de que las pruebas pasen.
+- Haz un pull request a la rama principal del repositorio.
 
 ## Licencia
 
