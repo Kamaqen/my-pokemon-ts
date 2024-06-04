@@ -6,29 +6,7 @@
 // Inciar un intervalo para mostras los segundos restantes en la consola
 // Recuerda 'cancelar' el intervalo cuando llegue a 0 segundos
 
-import { Battle } from "./battle";
 import Game from "./game";
-import { Bot, Player } from "./player";
-import { Pokemon } from "./pokemon";
-
-// const myPoke = new Pokemon("Squirtle");
-// const opponentPoke = new Pokemon("Onix");
-// console.log(myPoke.type);
-// console.log(opponentPoke.type);
-// console.log(myPoke.growthRate);
-// console.log(myPoke.baseExp);
-// console.log(myPoke.experiencePoints);
-// myPoke.setCurrentMove("bubble");
-// console.log(myPoke.stats);
-// console.log(opponentPoke.stats);
-// console.log(myPoke.calculateEffectiveness(opponentPoke));
-// console.log(myPoke.calculateBaseDamage(opponentPoke));
-// myPoke.attack(opponentPoke);
-// console.log(myPoke.level);
-// console.log(myPoke.expForLevel(myPoke.level + 1));
-// myPoke.processVictory(opponentPoke);
-
-// console.log(myPoke.isFainted());
 
 const game = new Game();
 game.start();
