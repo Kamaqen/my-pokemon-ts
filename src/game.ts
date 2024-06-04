@@ -103,29 +103,33 @@ export default class Game {
 
   showStats() {
     // Usar console.table para presentar las estadísticas de tu Pokémon
-    const {
-      species,
-      level,
-      type,
-      experiencePoints,
-      stats: { hp, attack, defense, specialAttack, specialDefense, speed },
-    } = this.player.pokemon;
+    if (this.player && this.player.pokemon) {
+      const {
+        species,
+        level,
+        type,
+        experiencePoints,
+        stats: { hp, attack, defense, specialAttack, specialDefense, speed },
+      } = this.player.pokemon;
 
-    const tipo = type.join(", ");
-    const statsTable = [
-      { Atributo: "Especie", Valor: species },
-      { Atributo: "Nivel", Valor: level },
-      { Atributo: "Tipo", Valor: tipo },
-      { Atributo: "Puntos de Experiencia", Valor: experiencePoints },
-      { Atributo: "Puntos de Salud", Valor: hp },
-      { Atributo: "Ataque", Valor: attack },
-      { Atributo: "Defensa", Valor: defense },
-      { Atributo: "Ataque Especial", Valor: specialAttack },
-      { Atributo: "Defensa Especial", Valor: specialDefense },
-      { Atributo: "Velocidad", Valor: speed },
-    ];
+      const tipo = type.join(", ");
+      const statsTable = [
+        { Atributo: "Especie", Valor: species },
+        { Atributo: "Nivel", Valor: level },
+        { Atributo: "Tipo", Valor: tipo },
+        { Atributo: "Puntos de Experiencia", Valor: experiencePoints },
+        { Atributo: "Puntos de Salud", Valor: hp },
+        { Atributo: "Ataque", Valor: attack },
+        { Atributo: "Defensa", Valor: defense },
+        { Atributo: "Ataque Especial", Valor: specialAttack },
+        { Atributo: "Defensa Especial", Valor: specialDefense },
+        { Atributo: "Velocidad", Valor: speed },
+      ];
 
-    console.table(statsTable);
+      console.table(statsTable);
+    } else {
+      console.error("El jugador o su Pokémon no están definidos.");
+    }
   }
 
   static welcome() {
