@@ -50,9 +50,9 @@ Después de seguir los pasos de instalación, puedes probar la aplicación en tu
 
 ## Scripts Disponibles
 
-npm run dev: Inicia el servidor de desarrollo.
-npm run build: Compila el proyecto.
-npm run preview: Previsualiza la versión de producción.
+- npm run dev: Inicia el servidor de desarrollo.
+- npm run build: Compila el proyecto.
+- npm run preview: Previsualiza la versión de producción.
 
 ## Estructura del Proyecto
 
