@@ -12,6 +12,7 @@ export default class Game {
     // llamar a welcome para el proceso de bienvenida y obtener el arreglo [name, pokemon, pokemonName]
     const userInput = Game.welcome();
     // crear un Player con la info obtenida (tu pokemon empieza con nivel 3 por defecto). Asignarlo al atributo 'player'
+
     const newPlayer = new Player(
       userInput[0]!,
       userInput[1]!,
@@ -142,6 +143,10 @@ Este mundo está habitado por criaturas llamadas POKÉMON. Para algunas personas
 Yo, particularmente,... estudio a los POKÉMON como profesión.`);
 
     const name = prompt("Primero, ¿cuál es tu nombre?", "Ash");
+    if (!name) {
+      Game.goodbye();
+      return;
+    }
 
     alert(`¡Perfecto! Entonces tu nombre es ${name!.toUpperCase()}!
 
