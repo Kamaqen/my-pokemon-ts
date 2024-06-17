@@ -3,8 +3,12 @@ import {
   PokemonObject,
   ExperienceCurves,
   CurveKeys,
+  Moves,
+  Move,
+  TypeMultiplier,
+  SpecialMoveTypes,
 } from "./pokedex";
-import randomBetween from "./utils";
+import { randomBetween } from "./utils.ts";
 
 type StatsObject = {
   hp: number;
@@ -15,13 +19,15 @@ type StatsObject = {
   speed: number;
 };
 
-class Pokemon {
+type EffortPoints = { type: string; amount: number };
+
+export class Pokemon {
   species: string;
   name: string;
   level: number;
   type: string[];
   baseExp: number;
-  effortPoints: { type: string; amount: number };
+  effortPoints: EffortPoints;
   growthRate: CurveKeys;
   baseStats: StatsObject;
   moves: string[];
@@ -29,12 +35,12 @@ class Pokemon {
   individualValues: StatsObject;
   effortValues: StatsObject;
   currentHp: number;
-  currentMove: string | null;
+  currentMove: Move | undefined | null;
 
-  constructor(species: string, name: string, level: number = 1) {
+  constructor(species: string, name: string = species, level: number) {
     // Inicializar atributos usando los parámetros
     this.species = species;
-    this.name = name || species;
+    this.name = name;
     this.level = level;
 
     // Inicializar atributos usando la información del Pokedex
@@ -148,63 +154,156 @@ class Pokemon {
 
   receiveDamage(damage: number): void {
     // reducir currentHp en la cantidad de damage. No debe quedar menor a 0.
+    this.currentHp = this.currentHp < damage ? 0 : this.currentHp - damage;
   }
 
-  setCurrentMove(move): void {
+  setCurrentMove(move: string): void {
     // buscar el move (string) en el pokedex y asignarlo al atributo currentMove
+    const moveObject: Move | undefined = Moves.find(
+      (movement) => movement.name === move
+    );
+    this.currentMove = moveObject;
   }
 
   isFainted(): boolean {
     // retornar si currentHp es 0 o no
+    return this.currentHp === 0;
   }
 
-  attack(target): void {
+  attack(target: Pokemon): void {
     // anunciar "[nombre] used [MOVE]!"
+    console.log(
+      `%c${this.name} used ${this.currentMove?.name.toUpperCase()}`,
+      "font-weight: bold; color: purple"
+    );
     // determinar si el movimiento "pega" con moveHits()
+    const moveHits: boolean = this.moveHits();
     // si "pega":
-    //  calcular daño base con calculateDamage
-    //  determinar si es un critical hit con isCritical
-    //  si es critico, anunciarlo
-    //  calcular el multiplicador de efectividad con calculateEffectiveness
-    //  anunciar mensaje según efectividad. Por ejemplo "It's not very effective..."
-    //  calcular el daño final usando el daño base, si fue critico o no y la efectividad
-    //  Hacer daño al oponente usando su metedo receiveDamage
-    //  Anunciar el daño hecho: "And it hit [oponente] with [daño] damage"
-    // si no "pega"
-    //  anunciar "But it MISSED!"
+    if (moveHits) {
+      //  calcular daño base con calculateDamage
+      const baseDamage: number = this.calculateBaseDamage(target);
+      //  determinar si es un critical hit con isCritical
+      const isCritical = this.isCritical();
+      //  si es critico, anunciarlo
+      if (isCritical) {
+        console.log("%cIt was a CRITICAL hit!", "color: pink");
+      }
+      //  calcular el multiplicador de efectividad con calculateEffectiveness
+      const effectiveness: number = this.calculateEffectiveness(target);
+      //  anunciar mensaje según efectividad. Por ejemplo "It's not very effective..."
+      switch (effectiveness) {
+        case 0:
+          console.log(
+            `%cIt doesn't affect ${target.name}.`,
+            "font-style: italic"
+          );
+          break;
+        case 0.5:
+          console.log("%cIt's not very effective...", "font-style: italic");
+          break;
+        case 2:
+        case 4:
+          console.log("%cIt's super effective!", "font-style: italic");
+          break;
+      }
+
+      //  calcular el daño final usando el daño base, si fue critico o no y la efectividad
+      const damage: number = isCritical
+        ? baseDamage * effectiveness * 1.5
+        : baseDamage * effectiveness;
+      //  Hacer daño al oponente usando su metedo receiveDamage
+      target.receiveDamage(damage);
+      //  Anunciar el daño hecho: "And it hit [oponente] with [daño] damage"
+      console.log(`And it hit ${target.name} with ${damage} damage.`);
+    } else {
+      // si no "pega"
+      //  anunciar "But it MISSED!"
+      console.log("But it MISSED!");
+    }
   }
 
   moveHits(): boolean {
-    // calcular si pega en base al accuracy del currentMove
+    // Generar un número aleatorio entre 1 y 100
+    const randomNumber = randomBetween(1, 100);
+
+    // Comprobar si el número aleatorio es menor o igual que la precisión del movimiento
+    return randomNumber <= this.currentMove?.accuracy!;
   }
 
   isCritical(): boolean {
     // 1/16 de probabilidad que sea critico
+    const randomNumber = randomBetween(1, 16);
+    return randomNumber === 1;
   }
 
-  calculateBaseDamage(target: string): number {
+  calculateBaseDamage(target: Pokemon): number {
     // determinar si el movimiento es especial comparando el currentMove con la data de Pokedex (SpecialMoveTypes)
+    const special = SpecialMoveTypes.includes(this.currentMove?.type!);
     // determinar si se usara el stat attack o specialAttack del atacante
+    const offensiveStat = special
+      ? this.stats.specialAttack
+      : this.stats.attack;
     // determinar si se usara el stat defense o specialDefense del defensor
+    const targetDefensiveStat = special
+      ? target.stats.specialDefense
+      : target.stats.defense;
+
+    const movePower = this.currentMove?.power!;
     // retornar el rsultado de la formula de daño
+    return (
+      Math.floor(
+        Math.floor(
+          (Math.floor((2 * this.level) / 5.0 + 2) * offensiveStat * movePower) /
+            targetDefensiveStat
+        ) / 50
+      ) + 2
+    );
   }
 
-  calculateEffectiveness(target): number {
-    // caluclar el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
+  calculateEffectiveness(target: Pokemon): number {
+    // calcular el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
+    const moveType = this.currentMove?.type;
+    // si no hay un movimiento actual o no tiene tipo, la efectividad es 1
+    if (!moveType) {
+      return 1;
+    }
+
+    // obtener los tipos del oponente
+    const targetTypes = target.type;
+
+    // inicializar la efectividad en 1
+    let effectiveness = 1;
+
+    // calcular la efectividad para cada tipo del oponente
+    targetTypes.forEach((targetType) => {
+      // si no existe la entrada en el multiplicador, se asume efectividad 1
+      const typeEffectiveness = TypeMultiplier[moveType]?.[targetType] ?? 1;
+      effectiveness *= typeEffectiveness;
+    });
+
+    // retornar la efectividad calculada
+    return effectiveness;
   }
 
-  processVictory(target): void {
+  processVictory(target: Pokemon): void {
     // calcular la experiencia ganada e incrementarla a tus experiencePoints
+    const experienceGained: number = Math.floor(
+      (target.baseExp * target.level) / 7
+    );
+    this.experiencePoints += experienceGained;
     // incrementar los effortValues en la estadística correspondiente con la información de effortPoints del oponente
+    const statType = target.effortPoints.type as keyof StatsObject;
+    this.effortValues[statType] += target.effortPoints.amount;
     // anunciar "[nombre] gained [cantidad] experience points"
+    console.log(`${this.name} gained ${experienceGained} experience points.`);
     // verificar si los nuevos experiencePoints te llevan a subir de nivel
+    const levelsUp: boolean =
+      this.experiencePoints >= this.expForLevel(this.level + 1);
     // si se sube de nivel
     // incrementar nivel y Anunciar "[nombre] reached level [nivel]!"
+    if (levelsUp) {
+      this.level++;
+      console.log(`${this.name} reached level ${this.level}!`);
+    }
   }
 }
-
-const poke = new Pokemon("Spearow", "char");
-console.log(poke.type);
-console.log(poke.growthRate);
-console.log(poke.baseExp);
-console.log(poke.experiencePoints);

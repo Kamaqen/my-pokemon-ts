@@ -15,6 +15,29 @@ export interface PokemonObject {
   moves: string[];
 }
 
+export type Move = {
+  name: string;
+  type: string;
+  power: number;
+  accuracy: number;
+  priority: number;
+};
+
+interface TypeMultiplier {
+  [attackingType: string]: {
+    [defendingType: string]: number;
+  };
+}
+
+type ExperienceCurveType = {
+  slow: (a: number) => number;
+  mediumSlow: (a: number) => number;
+  mediumFast: (a: number) => number;
+  fast: (a: number) => number;
+};
+
+export type CurveKeys = keyof ExperienceCurveType;
+
 export const Pokemons: PokemonObject[] = [
   {
     species: "Bulbasaur",
@@ -214,7 +237,7 @@ export const SpecialMoveTypes = [
   "dark",
 ];
 
-export const TypeMultiplier = {
+export const TypeMultiplier: TypeMultiplier = {
   normal: {
     rock: 0.5,
     ghost: 0,
@@ -373,18 +396,9 @@ export const TypeMultiplier = {
   },
 };
 
-type ExperienceCurveType = {
-  slow: (a: number) => number;
-  mediumSlow: (a: number) => number;
-  mediumFast: (a: number) => number;
-  fast: (a: number) => number;
-};
-
-export type CurveKeys = keyof ExperienceCurveType;
-
 export const ExperienceCurves: ExperienceCurveType = {
-  slow: (n) => (5 * n ** 3) / 4,
-  mediumSlow: (n) => (6 / 5) * n ** 3 - 15 * n ** 2 + 100 * n - 140,
-  mediumFast: (n) => n ** 3,
-  fast: (n) => (4 * n ** 3) / 5,
+  slow: (n) => Math.floor((5 * n ** 3) / 4),
+  mediumSlow: (n) => Math.floor((6 / 5) * n ** 3 - 15 * n ** 2 + 100 * n - 140),
+  mediumFast: (n) => Math.floor(n ** 3),
+  fast: (n) => Math.floor((4 * n ** 3) / 5),
 };
