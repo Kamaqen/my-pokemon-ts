@@ -12,7 +12,9 @@ export default class Game {
     // llamar a welcome para el proceso de bienvenida y obtener el arreglo [name, pokemon, pokemonName]
     const userInput = Game.welcome();
     // crear un Player con la info obtenida (tu pokemon empieza con nivel 3 por defecto). Asignarlo al atributo 'player'
-
+    if (!userInput) {
+      return;
+    }
     const newPlayer = new Player(
       userInput[0]!,
       userInput[1]!,
