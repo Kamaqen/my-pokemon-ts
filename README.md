@@ -73,4 +73,4 @@ Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más 
 
 ## Contacto
 
-Para preguntas, comentarios o cualquier tipo de retroalimentación, puedes contactarme a través de mi sitio web: [https://jorge-capcha.com](https://jorge-capcha.com).
+Para preguntas, comentarios o cualquier tipo de retroalimentación, puedes contactar con Jorge a través de su sitio web: [https://jorge-capcha.com](https://jorge-capcha.com).
